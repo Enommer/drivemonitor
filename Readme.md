@@ -50,6 +50,19 @@ optional arguments:
 
 Next log into your Google account when the screen pops up. Note: you'll need to do this twice, because we use 2 different APIs.
 
+### Sample Output:
+```
+[+] No new files
+[-] File 1VMKIeQLN1uQAYVO1bjYhnsJUFVtaHnce -> File created but not public yet
+[-] File 1VMKIeQLN1uQAYVO1bjYhnsJUFVtaHnce -> Now It's public
+[-] File is a public folder - making private! -> Try to make it private
+[-] Folder is now private -> Success!
+[-] File 1oE2qr4aIsuYWDGX0uIefZenjjbZ2eQKp
+[-] File is a public folder - making private!
+[-] Folder is now private
+[-] File 1oE2qr4aIsuYWDGX0uIefZenjjbZ2eQKp
+```
+
 ## Use Notes
 
 ### Scopes
