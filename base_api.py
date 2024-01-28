@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 
 class BaseAPI(object):
-    API_SECRET_FILE_NAME = 'old/credentials.json'
+    API_SECRET_FILE_NAME = 'credentials.json'
     TOKEN_FILE_NAME = ''
     TOKEN_SCOPES = []
 

@@ -4,7 +4,7 @@ from base_api import BaseAPI
 
 
 class ActivityMonitor(BaseAPI):
-    TOKEN_FILE_NAME = 'old/activity_token.json'
+    TOKEN_FILE_NAME = 'activity_token.json'
     SERVICE_NAME = 'driveactivity'
     API_VERSION = 'v2'
     TOKEN_SCOPES = ['https://www.googleapis.com/auth/drive.activity.readonly']

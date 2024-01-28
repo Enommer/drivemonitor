@@ -2,7 +2,7 @@ from base_api import BaseAPI
 
 
 class DriveAPI(BaseAPI):
-    TOKEN_FILE_NAME = 'old/drive_token.json'
+    TOKEN_FILE_NAME = 'drive_token.json'
     SERVICE_NAME = 'drive'
     API_VERSION = 'v3'
     TOKEN_SCOPES = ['https://www.googleapis.com/auth/drive']
