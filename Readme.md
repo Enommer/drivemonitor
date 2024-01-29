@@ -2,7 +2,8 @@
 
 ## Overview
 
-The purpose of this script is to monitor your Google Drive account for any publicly visible folders and make them private.
+The purpose of this script is to monitor your Google Drive account for any publicly accessible files. 
+If these files are in a publicly accessible folder the script makes them private. 
 
 ## Usage:
 
@@ -53,14 +54,10 @@ Next log into your Google account when the screen pops up. Note: you'll need to 
 ### Sample Output:
 ```
 [+] No new files
-[-] File 1VMKIeQLN1uQAYVO1bjYhnsJUFVtaHnce -> File created but not public yet
-[-] File 1VMKIeQLN1uQAYVO1bjYhnsJUFVtaHnce -> Now It's public
-[-] File is a public folder - making private! -> Try to make it private
-[-] Folder is now private -> Success!
-[-] File 1oE2qr4aIsuYWDGX0uIefZenjjbZ2eQKp
-[-] File is a public folder - making private!
-[-] Folder is now private
-[-] File 1oE2qr4aIsuYWDGX0uIefZenjjbZ2eQKp
+[-] File 1ihM7GK4t_Dx2o69NWDiLQkQmA8AkvxqX is public -> public file detected
+[-] File is now private! -> made file private
+[-] File 1ihM7GK4t_Dx2o69NWDiLQkQmA8AkvxqX is private
+[+] No new files
 ```
 
 ## Use Notes

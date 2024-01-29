@@ -10,7 +10,7 @@ class ActivityMonitor(BaseAPI):
     TOKEN_SCOPES = ['https://www.googleapis.com/auth/drive.activity.readonly']
 
     TIME_FILTER = 'time >= \"{time_stamp}\"'
-    SEARCH_TIME_DELTA_MINUTES = 5
+    SEARCH_TIME_DELTA_SECONDS = 5
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,8 +18,8 @@ class ActivityMonitor(BaseAPI):
         self.reset_last_query_time()
 
     def reset_last_query_time(self):
-        # Set to 5 minutes back to avoid missing events
-        self.last_query_time = datetime.utcnow() - timedelta(minutes=self.SEARCH_TIME_DELTA_MINUTES)
+        # Set to 10 seconds back to avoid missing events
+        self.last_query_time = datetime.utcnow() - timedelta(seconds=self.SEARCH_TIME_DELTA_SECONDS)
 
     def get_last_query_time_formatted(self):
         # Format the last query time, including "Z" to indicate UTC
@@ -43,14 +43,17 @@ class ActivityMonitor(BaseAPI):
         if activities:
             for activity in activities:
                 # Extract target fields from the request
+                actions = activity.get('actions', [])
                 targets = activity.get('targets', [])
 
-                # Note: I tried filtering for created files only, but I was getting weird behaviour with actions
-                # being "moved" instead of "create", so I removed the action type filter and return any file that
-                # is included as a target
-                for target in targets:
-                    # Extract file id (ie 'items/17teqawaAogvoYHNLxNdV_8ihPSgWqPEn')
-                    file_id = target['driveItem']['name'].split('/')[-1]
-                    new_file_ids.append(file_id)
+                for action in actions:
+                    # Check if file is new or moved into public folders
+                    # Note: I added move to the filter because I saw weird behaviour with doc files created being tagged
+                    # as "moved" only
+                    if 'create' in action.get('detail', '') or 'moved' in action.get('detail', ''):
+                        for target in targets:
+                            # Extract file id (ie 'items/17teqawaAogvoYHNLxNdV_8ihPSgWqPEn')
+                            file_id = target['driveItem']['name'].split('/')[-1]
+                            new_file_ids.append(file_id)
 
         return new_file_ids

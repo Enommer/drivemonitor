@@ -8,7 +8,7 @@ class DriveAPI(BaseAPI):
     TOKEN_SCOPES = ['https://www.googleapis.com/auth/drive']
 
     def get_file_object(self, file_id):
-        return self.api.files().get(fileId=file_id, fields='id, name, owners, permissions, mimeType').execute()
+        return self.api.files().get(fileId=file_id, fields='id, name, owners, permissions, mimeType, parents').execute()
 
     def delete_file_permission(self, file_id, perm_id):
         self.api.permissions().delete(fileId=file_id, permissionId=perm_id).execute()

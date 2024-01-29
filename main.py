@@ -4,8 +4,7 @@ import time
 from activity_monitor import ActivityMonitor
 from drive_api import DriveAPI
 
-MAIN_LOOP_SLEEP_TIME = 10
-
+MAIN_LOOP_SLEEP_TIME = 5
 
 def get_args():
     parser = argparse.ArgumentParser(description='A script that monitors and protect public folders in google drive.')
@@ -13,6 +12,16 @@ def get_args():
 
     return parser.parse_args()
 
+def get_public_permission_id(file_data):
+    # Checks if file is public and returns the public permission id
+    # (This will always be 'anyoneWithLink' but I'm returning the file_id in case this changes in the future)
+    permissions = file_data['permissions']
+    for permission in permissions:
+        # Check if permission is public
+        if permission['type'] == 'anyone':
+            return permission['id']
+
+    return None
 
 def main():
     args = get_args()
@@ -25,26 +34,25 @@ def main():
 
         if new_file_ids:
             for new_file_id in new_file_ids:
-                print(f'[-] File {new_file_id}')
-
                 # Get more info about the file object
                 new_file = drive_api.get_file_object(new_file_id)
 
-                # Check if the file is a folder
-                if new_file['mimeType'] == 'application/vnd.google-apps.folder':
-                    # Check if is a public folder
-                    permissions = new_file['permissions']
-                    for permission in permissions:
-                        # Check if permission is public
-                        if permission['type'] == 'anyone':
-                            print('[-] File is a public folder - making private!')
+                public_permission_id = get_public_permission_id(new_file)
+                # File is public
+                if public_permission_id:
+                    print(f'[-] File {new_file_id} is public')
 
-                            # Delete the public permission
+                    for parent in new_file['parents']:
+                        # Is parent publicly accessible
+                        # (Publicly accessible folders automatically set their children as public)
+                        if get_public_permission_id(drive_api.get_file_object(parent)):
                             try:
-                                drive_api.delete_file_permission(new_file_id, permission['id'])
-                                print('[-] Folder is now private')
+                                drive_api.delete_file_permission(new_file_id, public_permission_id)
+                                print('[-] File is now private!')
                             except Exception as e:
                                 print('[!] Failed to delete permission, check logs!')
+                else:
+                    print(f'[-] File {new_file_id} is private')
         else:
             print('[+] No new files')
 
